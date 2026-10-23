@@ -1,0 +1,14 @@
+services:
+  online-forever:
+    image: ghcr.io/blacklizardcode/online-forever:latest
+    container_name: online-forever
+    restart: unless-stopped
+    environment:
+      DISCORD_TOKEN: ${DISCORD_TOKEN}                      # Your discord token (set it in a .env file).
+      DISCORD_STATUS: online                               # online / dnd / idle
+      DISCORD_STATUS_MESSAGE: ""                           # Leave empty if you don't want a custom status.
+      # Uncomment to show an emoji in the custom status.
+      # DISCORD_EMOJI: "true"
+      # DISCORD_EMOJI_NAME: "🔥"                           # Unicode emoji or emoji name.
+      # DISCORD_EMOJI_ID: ""                               # Required only for custom emojis.
+      # DISCORD_EMOJI_ANIMATED: "true"                     # Only for animated custom emojis.
