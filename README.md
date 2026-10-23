@@ -1,3 +1,6 @@
+This is a fork of [SealedSaucer](https://github.com/SealedSaucer/Online-Forever)'s Online Forever, make sure to give that one a star and not this one, this repo is mostly just qol changes I felt like were needed.
+
+
 <div id="Phantom" align="center">
     <h1>Online Forever</h1>
     <p>Make Your Discord Account 24/7 Online!</p>
