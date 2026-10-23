@@ -52,6 +52,43 @@ You will need an user token inorder to use this code. You can obtain it by doing
 6. Open command prompt inside the folder and run `pip install -r requirements.txt`
 7. Once the packages are downloaded, either double-click the `main.py` file in order to run it or open command prompt and run `python main.py`
 
+## 🐳 Running with Docker
+
+Running it in Docker keeps it online in the background and restarts it automatically after a crash or reboot.
+
+1. Install [Docker](https://docs.docker.com/engine/install/). On Linux you can use the convenience script:
+   ```sh
+   curl -fsSL https://get.docker.com | sh
+   ```
+2. Download the repository (or just the `docker-compose.yml` file)
+3. Create a file named `.env` next to `docker-compose.yml` and put your token in it:
+   ```env
+   DISCORD_TOKEN=your_token_here
+   ```
+4. Optionally, edit the status settings in `docker-compose.yml`:
+
+   | Variable | Description | Default |
+   | --- | --- | --- |
+   | `DISCORD_TOKEN` | Your Discord token (**required**) | — |
+   | `DISCORD_STATUS` | `online`, `idle` or `dnd` | `online` |
+   | `DISCORD_STATUS_MESSAGE` | Custom status text, leave empty for none | empty |
+   | `DISCORD_EMOJI` | Set to `true` to show an emoji in the status | off |
+   | `DISCORD_EMOJI_NAME` | Unicode emoji or emoji name | `🔥` |
+   | `DISCORD_EMOJI_ID` | ID of a custom emoji (only needed for custom emojis) | — |
+   | `DISCORD_EMOJI_ANIMATED` | Set to `true` for animated custom emojis | off |
+
+5. Start the container:
+   ```sh
+   docker compose up -d
+   ```
+
+Useful commands:
+```sh
+docker compose logs -f   # view the logs
+docker compose pull && docker compose up -d   # update to the latest version
+docker compose down      # stop it
+```
+
 ---
 
 <p align="center">Online Forever is licensed under <a href="https://github.com/SealedSaucer/Online-Forever/blob/main/LICENSE">GNU General Public License</a> ❤️</p>
