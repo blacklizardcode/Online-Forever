@@ -2,35 +2,34 @@ import asyncio
 import json
 import requests
 import websockets
+import os
 
-TOKEN = "Add your token here"
-STATUS = "online"  # online / dnd / idle
-CUSTOM_STATUS = "Hey!"  # Leave empty if you don't want a custom status
-USE_EMOJI = False
-
-headers = {"Authorization": TOKEN}
-
-r = requests.get("https://discord.com/api/v10/users/@me", headers=headers)
-if r.status_code != 200:
-    print("Invalid token!")
-    exit()
-
-user = r.json()
-print(f"Logged in as {user['username']} ({user['id']})!")
+TOKEN = os.getenv("DISCORD_TOKEN")                         # Your discord token.
+STATUS = os.getenv("DISCORD_STATUS") or "online"           # online / dnd / idle
+STATUS_MESSAGE = os.getenv("DISCORD_STATUS_MESSAGE") or "" # Leave empty if you don't want a custom status.
+USE_EMOJI = os.getenv("DISCORD_EMOJI") or False            # Enable the use of an emoji in the status.
 
 activity = {
     "name": "Custom Status",
     "type": 4,
-    "state": CUSTOM_STATUS,
+    "state": STATUS_MESSAGE,
     "id": "custom"
 }
 
 if USE_EMOJI:
     activity["emoji"] = {
-        "name": "🔥",   # Unicode emoji or emoji name
-        "id": None,     # Required only for custom emojis
-        "animated": False
+        "name": os.getenv("DISCORD_EMOJI_NAME") or "🔥",    # Unicode emoji or emoji name.
+        "id": os.getenv("DISCORD_EMOJI_ID") or None,        # Required only for custom emojis.
+        "animated": os.getenv("DISCORD_EMOJI_ANIMATED") or False
     }
+
+r = requests.get("https://discord.com/api/v10/users/@me", headers={"Authorization": TOKEN})
+if r.status_code != 200:
+    print(f"An error occured, code: {r.status_code}")
+    exit()
+
+user = r.json()
+print(f"Logged in as {user['username']} ({user['id']})!")
 
 async def discord_gateway():
     uri = "wss://gateway.discord.gg/?v=10&encoding=json"
@@ -76,6 +75,12 @@ async def discord_gateway():
                 print("Connection lost, reconnecting...", e)
                 break
 
-while True:
-    asyncio.run(discord_gateway())
-    asyncio.sleep(5)
+if __name__ == "__main__":
+    while True:
+        try:
+            asyncio.run(discord_gateway())
+        except Exception as e:
+            print("Gateway error:", e)
+
+        import time
+        time.sleep(5)
